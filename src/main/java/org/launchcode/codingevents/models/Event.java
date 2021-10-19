@@ -6,6 +6,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 /**
  * Created by Chris Bay
@@ -72,6 +73,11 @@ public class Event extends AbstractEntity {
     @Override
     public String toString() {
         return name;
+    }
+
+    @Override
+    public List<Event> getEvents() {
+        return null;
     }
 
 }

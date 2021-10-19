@@ -3,6 +3,7 @@ package org.launchcode.codingevents.models;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -32,4 +33,8 @@ public abstract class AbstractEntity {
         return Objects.hash(id);
     }
 
+    public List<Event> getEvents() {
+
+        return null;
+    }
 }
