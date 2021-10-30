@@ -2,8 +2,10 @@ package org.launchcode.codingevents.controllers;
 
 import org.launchcode.codingevents.data.EventCategoryRepository;
 import org.launchcode.codingevents.data.EventRepository;
+import org.launchcode.codingevents.data.TagRepository;
 import org.launchcode.codingevents.models.Event;
 import org.launchcode.codingevents.models.EventCategory;
+import org.launchcode.codingevents.models.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,6 +13,7 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.Optional;
 
 /**
@@ -26,20 +29,27 @@ public class EventController {
     @Autowired
     private EventCategoryRepository eventCategoryRepository;
 
-    @GetMapping
-    public String displayEvents(@RequestParam(required = false) Integer categoryId, Model model) {
+    @Autowired
+    private TagRepository tagRepository;
 
-        if (categoryId == null) {
+    @GetMapping
+    public String displayEvents(@RequestParam(required = false) Integer categoryId,@RequestParam(required = false) Integer tagId, Model model,Errors errors) {
+
+        if (categoryId == null && tagId == null) {
             model.addAttribute("title", "All Events");
             model.addAttribute("events", eventRepository.findAll());
         } else {
             Optional<EventCategory> result = eventCategoryRepository.findById(categoryId);
             if (result.isEmpty()) {
                 model.addAttribute("title", "Invalid Category ID: " + categoryId);
-            } else {
+            } else if (tagId != null){
+                Optional<Tag>tag= tagRepository.findById(tagId);
+            } else if(tagId == null) {
                 EventCategory category = result.get();
                 model.addAttribute("title", "Events in category: " + category.getName());
                 model.addAttribute("events", category.getEvents());
+                model.addAttribute("tags",tagId);
+                model.addAttribute("Errors","Tag Is required");
             }
         }
 
